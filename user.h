@@ -28,9 +28,9 @@ int uptime(void);
 int getsyscallinfo(void);
 
 // Added for class - Project 2
-int count (void);
+int count(void);
 int settickets(int);
-int getpinfo(struct pstat*);
+int getpinfo(void);
 
 // ulib.c
 int stat(const char*, struct stat*);

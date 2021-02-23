@@ -62,10 +62,10 @@ struct proc {
 
 //Added for class - Project 2
 #include "pstat.h"
-#include "spinlock.h"
+// #include "spinlock.h"
 // Make the process table public
 struct public_ptable {
-  struct spinlock lock;
+  // struct spinlock lock;
   struct proc proc[NPROC];
 };
 

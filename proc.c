@@ -6,10 +6,12 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "pstat.h"
 
 struct {
   struct spinlock lock;
   struct proc proc[NPROC];
+  int totaltickets;
 } ptable;
 
 static struct proc *initproc;
@@ -531,4 +533,46 @@ procdump(void)
     }
     cprintf("\n");
   }
+}
+
+// PROJECT 2
+
+int 
+settickets(int new)
+{
+  struct proc *curproc = myproc();
+  acquire(&ptable.lock);
+  ptable.totaltickets -= curproc->tickets;
+  curproc->tickets = new;
+  ptable.totaltickets += new;
+  release(&ptable.lock);
+  return 0;
+}
+
+int 
+getpinfo(struct pstat *ps)
+{
+  int i;
+  struct proc *p;
+  for (i = 0; i < NPROC; ++i)
+  {
+    ps->inuse[i] = 0;
+  }
+  i = 0;
+
+  for (p = ptable.proc; p < &ptable.proc[NPROC]; p++)
+  {
+    if (p->state == UNUSED)
+      continue;
+    ps->inuse[i] = 1;
+    ps->pid[i] = p->pid;
+    ps->hticks[i] = p->tickets;
+    ps->lticks[i] = p->tickets;
+    acquire(&tickslock);
+    ps->hticks[i] = ticks - (p->totalsleep);
+    release(&tickslock);
+    i++;
+  }
+
+  return 0;
 }

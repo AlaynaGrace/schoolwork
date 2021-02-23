@@ -24,6 +24,10 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 
+//PROJECT 2
+int settickets(int);
+int getpinfo(struct pstat *);
+
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);

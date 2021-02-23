@@ -6,7 +6,6 @@
 #include "memlayout.h"
 #include "mmu.h"
 #include "proc.h"
-#include "pstat.h"
 
 int
 sys_fork(void)
@@ -89,57 +88,4 @@ sys_uptime(void)
   xticks = ticks;
   release(&tickslock);
   return xticks;
-}
-
-// Adding for class - Project 1
-int
-sys_getsyscallinfo(void)
-{
-  extern int sysCallCount;
-  return sysCallCount;
-}
-
-// Adding for class - Project 2
-int counter = 0;
-
-int
-sys_settickets(void)
-{
-  int n;
-  if(argint(0, &n) < 0){
-	  myproc()->tickets = 1;
-  }
-  else{
-	  myproc()->tickets = n;
-  }
-  return 0;
-}
-
-int
-sys_getpinfo(void)
-{
-  acquire(&ptable.lock);
-  struct pstat* procstat;
-  struct proc* p;
-  if(argint(0, (int*)(&procstat)) < 0) {
-    return -1;
-  }
-
-  for(p = ptable.proc; p != &(ptable.proc[NPROC]); p++) {
-    int index = p - ptable.proc;
-    if(p->state != UNUSED) {
-	    procstat->pid[index] = p->pid;
-      procstat->hticks[index] = p->tickets;
-	    procstat->lticks[index] = p->tickets;
-	    procstat->inuse[index] = p->inuse;
-    }
-  }
-  release(&ptable.lock);
-  return 0;
-}
-
-int
-sys_count(void)
-{
-  return 25;
 }

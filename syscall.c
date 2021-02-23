@@ -104,16 +104,6 @@ extern int sys_wait(void);
 extern int sys_write(void);
 extern int sys_uptime(void);
 
-// Adding for class - Project 1
-extern int sys_getsyscallinfo(void);
-
-// ADDED FOR CLASS - Project 2
-// Fetch the int at addr from process p.
-extern int sys_count(void);
-extern int counter;
-extern int sys_settickets(void);
-extern int sys_getpinfo(void);
-
 static int (*syscalls[])(void) = {
 [SYS_fork]    sys_fork,
 [SYS_exit]    sys_exit,
@@ -136,10 +126,6 @@ static int (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
-[SYS_getsyscallinfo]   sys_getsyscallinfo,
-[SYS_count]   sys_count,
-[SYS_settickets] sys_settickets,
-[SYS_getpinfo] sys_getpinfo,
 };
 
 void

@@ -24,14 +24,6 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 
-// Adding for class - Project 1
-int getsyscallinfo(void);
-
-// Added for class - Project 2
-int count(void);
-int settickets(int);
-int getpinfo(void);
-
 // ulib.c
 int stat(const char*, struct stat*);
 char* strcpy(char*, const char*);

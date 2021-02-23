@@ -49,9 +49,6 @@ struct proc {
   struct file *ofile[NOFILE];  // Open files
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
-  int tickets;                 // Lottery scheduler addition
-  int ticks;                   // How many ticks this process has gone through
-  int inuse;                   // 0 or 1, if process is in use by CPU or not
 };
 
 // Process memory is laid out contiguously, low addresses first:
@@ -59,14 +56,3 @@ struct proc {
 //   original data and bss
 //   fixed-size stack
 //   expandable heap
-
-//Added for class - Project 2
-#include "pstat.h"
-// #include "spinlock.h"
-// Make the process table public
-struct public_ptable {
-  // struct spinlock lock;
-  struct proc proc[NPROC];
-};
-
-extern struct public_ptable ptable; // Declare the public ptable.

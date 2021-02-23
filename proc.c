@@ -12,11 +12,9 @@ struct {
   struct proc proc[NPROC];
 } ptable;
 
-struct public_ptable ptable = {0};
 static struct proc *initproc;
 
 int nextpid = 1;
-unsigned int seed = 111;
 extern void forkret(void);
 extern void trapret(void);
 
@@ -90,9 +88,6 @@ allocproc(void)
 found:
   p->state = EMBRYO;
   p->pid = nextpid++;
-
-  //Add for class - Project 2
-  p->tickets = 1;
 
   release(&ptable.lock);
 
@@ -204,9 +199,6 @@ fork(void)
   np->sz = curproc->sz;
   np->parent = curproc;
   *np->tf = *curproc->tf;
-
-  //Added for class - Project 2
-  np->tickets = curproc->tickets;
 
   // Clear %eax so that fork returns 0 in the child.
   np->tf->eax = 0;
@@ -337,47 +329,26 @@ scheduler(void)
   for(;;){
     // Enable interrupts on this processor.
     sti();
-    unsigned int totalTickets = 0; // Total amount of tickets in RUNNABLE processes.
-    unsigned int ticketCounter = 0; // Count of how many tickets have been processed in
-				    // the current loop.
-    acquire(&ptable.lock);
-    // Loop to calculate the total amount of tickets of runnable processes.
-    for (p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state == RUNNABLE) {
-        totalTickets += p->tickets;
-      }
-    }
 
-    // Seed srand() and calculate winning ticket, then create new seed value.
-    sgenrand(seed);
-    unsigned int winningTicket = random_at_most(totalTickets);
-    seed++;
-    
     // Loop over process table looking for process to run.
+    acquire(&ptable.lock);
     for(p = ptable.proc; p < &ptable.proc[NPROC]; p++){
-      if(p->state != RUNNABLE) // Skip over non-runnable processes.
+      if(p->state != RUNNABLE)
         continue;
-      ticketCounter += p->tickets; // Add the tickets of the current process to the ticket counter.
-      if(ticketCounter < winningTicket) { // If the current process is not the winner, go to next.
-	continue;
-      }
+
       // Switch to chosen process.  It is the process's job
       // to release ptable.lock and then reacquire it
       // before jumping back to us.
+      c->proc = p;
       switchuvm(p);
       p->state = RUNNING;
-      p->inuse = 1;
-      int tempTicks = ticks;
-      // Run process
-      swtch(&c->scheduler, p->context);
-      p->ticks += ticks - tempTicks;
-      p->inuse = 0;
+
+      swtch(&(c->scheduler), p->context);
       switchkvm();
 
       // Process is done running for now.
       // It should have changed its p->state before coming back.
-      p = 0;
-      break;
+      c->proc = 0;
     }
     release(&ptable.lock);
 

@@ -330,12 +330,12 @@ wait(void)
   }
 }
 
-unsigned long randstate = 1;
+unsigned long randstates = 1;
 unsigned int
 newrand()
 {
-  randstate = randstate * 1664525 + 1013904223;
-  return randstate;
+  randstates = randstates * 1664525 + 1013904223;
+  return randstates;
 }
 
 //PAGEBREAK: 42

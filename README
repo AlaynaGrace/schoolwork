@@ -1,8 +1,3 @@
-ALL CLASS NOTES FOR ICS462 ARE IN README.MD. THIS IS THE ORIGINAL README FROM THE XV6-PUBLIC REPOSITORY.
-
----
-
-
 NOTE: we have stopped maintaining the x86 version of xv6, and switched
 our efforts to the RISC-V version
 (https://github.com/mit-pdos/xv6-riscv.git)

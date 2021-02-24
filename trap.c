@@ -14,9 +14,6 @@ extern uint vectors[];  // in vectors.S: array of 256 entry pointers
 struct spinlock tickslock;
 uint ticks;
 
-// Adding for class
-int sysCallCount = 0;
-
 void
 tvinit(void)
 {
@@ -43,8 +40,6 @@ trap(struct trapframe *tf)
     if(myproc()->killed)
       exit();
     myproc()->tf = tf;
-    // Adding for class
-    sysCallCount++;
     syscall();
     if(myproc()->killed)
       exit();
@@ -83,6 +78,20 @@ trap(struct trapframe *tf)
     lapiceoi();
     break;
 
+  /* 
+  case T_PAGEFAULT:
+    if(myproc() == 0 || (tf->cs&3) == 0){
+      // In kernel, it must be our mistake.
+      cprintf("unexpected page fault (trap no:%d) from cpu %d eip %x (cr2=0x%x)\n",
+              tf->trapno, cpuid(), tf->eip, rcr2());
+      panic("trap");
+    }
+    // Specialize error info for page fault
+    cprintf("Segmentation fault\n");
+    myproc()->killed = 1;
+    break;
+   */
+  
   //PAGEBREAK: 13
   default:
     if(myproc() == 0 || (tf->cs&3) == 0){

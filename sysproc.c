@@ -91,7 +91,6 @@ sys_uptime(void)
   return xticks;
 }
 
-// PROJECT 2
 int
 sys_settickets(void)
 {

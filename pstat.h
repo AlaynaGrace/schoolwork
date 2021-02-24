@@ -1,13 +1,39 @@
-#ifndef _PSTAT_H_
-#define _PSTAT_H_
+#ifndef _PSTAT_H
+#define _PSTAT_H
 
 #include "param.h"
 
+enum procstate { UNUSED, EMBRYO, SLEEPING, RUNNABLE, RUNNING, ZOMBIE };
+
+// Copied directly form the assignment sheet
+// Everything in this structure is DESCRIPTIVE
+// but NOT PRESCRIPTIVE
+//
+// Meaning that the values of the fields here
+// should have absolutely no effect on the kernel
+// (but maybe the userspace if the programmer is being an idiot)
 struct pstat {
-    int inuse[NPROC]; // whether this slot of the process process table is in use (1 or 0)
-    int pid[NPROC];   // the PID of each process
-    int hticks[NPROC]; // the number of ticks each process has accumulated at HIGH priority
-    int lticks[NPROC]; // the number of ticks each process has accumulated at LOW priority
+	// Whether the process is running
+	// Each entry will be 1 or 0 
+	//
+	// There should only be at most one '1'
+	// (Per CPU)
+	_Bool inuse[NPROC];
+
+	// PID of each process
+	int pid[NPROC];
+
+	// Number of ticks each process has accumulated
+	int ticks[NPROC];
+
+	// Number of tickets
+	int tickets[NPROC];
+
+	//state
+	enum procstate state[NPROC];
+
+	int total_tickets;
+
 };
 
-#endif // _PSTAT_H_
+#endif

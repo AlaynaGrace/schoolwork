@@ -347,7 +347,7 @@ scheduler(void)
   c->proc = 0;
   
   for(;;){
-    int lottery = srand(1) % ptable.totaltickets;
+    int lottery = rand() % ptable.totaltickets;
     int ticketcounter = 0, allsleeping = 1;
     // Enable interrupts on this processor.
     sti();

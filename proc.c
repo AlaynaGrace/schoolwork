@@ -332,7 +332,7 @@ wait(void)
 
 unsigned long randstate = 1;
 unsigned int
-rand()
+newrand()
 {
   randstate = randstate * 1664525 + 1013904223;
   return randstate;
@@ -354,7 +354,7 @@ scheduler(void)
   c->proc = 0;
   
   for(;;){
-    int lottery = rand() % ptable.totaltickets;
+    int lottery = newrand() % ptable.totaltickets;
     int ticketcounter = 0, allsleeping = 1;
     // Enable interrupts on this processor.
     sti();

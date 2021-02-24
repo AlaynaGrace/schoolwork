@@ -330,14 +330,6 @@ wait(void)
   }
 }
 
-unsigned long randstates = 1;
-unsigned int
-newrand()
-{
-  randstates = randstates * 1664525 + 1013904223;
-  return randstates;
-}
-
 //PAGEBREAK: 42
 // Per-CPU process scheduler.
 // Each CPU calls scheduler() after setting itself up.
@@ -354,7 +346,7 @@ scheduler(void)
   c->proc = 0;
   
   for(;;){
-    int lottery = newrand() % ptable.totaltickets;
+    int lottery = 1 % ptable.totaltickets;
     int ticketcounter = 0, allsleeping = 1;
     // Enable interrupts on this processor.
     sti();

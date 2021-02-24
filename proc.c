@@ -346,7 +346,7 @@ scheduler(void)
   c->proc = 0;
   
   for(;;){
-    int lottery = rand() % ptable.totaltickets;
+    int lottery = srand(1) % ptable.totaltickets;
     int ticketcounter = 0, allsleeping = 1;
     // Enable interrupts on this processor.
     sti();
@@ -486,7 +486,7 @@ sleep(void *chan, struct spinlock *lk)
   acquire(&tickslock);
   p->lastsleep = ticks;
   release(&tickslock);
-  
+
   // Go to sleep.
   p->chan = chan;
   p->state = SLEEPING;
